@@ -97,9 +97,9 @@ export default function Home() {
         <ClientsSlider />
       </Suspense>
 
-      <Suspense fallback={<LoadingPlaceholder />}>
+      {/* <Suspense fallback={<LoadingPlaceholder />}>
         <Section6 />
-      </Suspense>
+      </Suspense> */}
 
       <Suspense fallback={<LoadingPlaceholder />}>
         <AboutHome />
