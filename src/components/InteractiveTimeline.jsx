@@ -340,12 +340,8 @@ const InteractiveTimeline = () => {
         </div>
       </div>
 
-      {/* Floating CTA */}
-      <div className="mt-20 text-center">
-        <button className="px-8 py-4 bg-gradient-to-r from-[#E73C5F] to-[#E73C5F]/90 rounded-xl text-white font-semibold shadow-lg hover:shadow-[#E73C5F]/50 hover:scale-[1.02] transition-all duration-300 animate-float">
-          Download Full Resume
-        </button>
-      </div>
+      
+      
     </section>
   );
 };
