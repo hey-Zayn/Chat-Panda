@@ -81,17 +81,17 @@ export default function Home() {
         <Section2 />
       </Suspense>
 
-      <Suspense fallback={<LoadingPlaceholder />}>
+       <Suspense fallback={<LoadingPlaceholder />}>
         <Section3 />
       </Suspense>
 
-      <Suspense fallback={<LoadingPlaceholder />}>
-        {/* <Section3Dnew /> */}
-      </Suspense>
+      {/* <Suspense fallback={<LoadingPlaceholder />}>
+         <Section3Dnew /> 
+      </Suspense> */}
 
-      <Suspense fallback={<LoadingPlaceholder />}>
+      {/* <Suspense fallback={<LoadingPlaceholder />}>
         <Section7 />
-      </Suspense>
+      </Suspense> */}
 
       <Suspense fallback={<LoadingPlaceholder />}>
         <ClientsSlider />
@@ -115,7 +115,7 @@ export default function Home() {
 
       <Suspense fallback={<LoadingPlaceholder />}>
         <PandaScroll />
-      </Suspense>
+      </Suspense> 
     </>
   );
 }
