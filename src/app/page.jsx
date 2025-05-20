@@ -96,7 +96,7 @@ export default function Home() {
       <Suspense fallback={<LoadingPlaceholder />}>
         <ClientsSlider />
       </Suspense>
-
+          {/* Eror */}
       {/* <Suspense fallback={<LoadingPlaceholder />}>
         <Section6 />
       </Suspense> */}

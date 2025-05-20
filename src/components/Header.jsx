@@ -426,6 +426,7 @@ const Header = () => {
       subMenuHeading: [
         "About Us",
         "Careers",
+        "Our Values",
         
       ],
       subMenu: [
@@ -434,6 +435,21 @@ const Header = () => {
           desc: "Our story", 
           icon: Users,  
           link: '/Who-We-Are' 
+        },
+        { 
+          name: "Portfolio", 
+          desc: "Our work", 
+          icon: WorkflowIcon,  
+          link: '/portfolio' 
+          
+        },
+       
+      
+        { 
+          name: "We are hiring!", 
+          desc: "Careers", 
+          icon: Briefcase,  
+          link: '/we-are-hiring' 
         },
         { 
           name: "Meet OUR LEAD", 
@@ -447,6 +463,7 @@ const Header = () => {
           icon: Cog,  
           link: '/How-It-Works' 
         },
+      
         { 
           name: "Packages", 
           desc: "Our offerings", 
@@ -454,57 +471,24 @@ const Header = () => {
           link: '/packages' 
         },
         { 
-          name: "Portfolio", 
-          desc: "Our work", 
-          icon: WorkflowIcon,  
-          link: '/portfolio' 
-          // link: '/our-work' 
-        },
-        { 
-          name: "Company Values", 
-          desc: "Our principles", 
-          icon: Heart,  
-          link: '/company-values' 
-        },
-        { 
-          name: "Company Excellence", 
-          desc: "Our achievements", 
-          icon: Award,  
-          link: '/company-excellence' 
-        },
-        { 
           name: "Our Team", 
           desc: "Meet us", 
           icon: UserCircle2,  
           link: '/our-team' 
         },
-        { 
-          name: "How to be a part of Forwords sols", 
-          desc: "Join us", 
-          icon: Handshake,  
-          link: '/forwords-sols' 
-        },
+      
+        
         { 
           name: "FAQs", 
           desc: "Get answers", 
           icon: HelpCircle,  
           link: '/FAQs' 
         },
-        { 
-          name: "We are hiring!", 
-          desc: "Careers", 
-          icon: Briefcase,  
-          link: '/we-are-hiring' 
-        },
-        { 
-          name: "Heirarchy & Positioning", 
-          desc: "Our structure", 
-          icon: Layers,  
-          link: '/heirarchy-positioning' 
-        },
+      
+        
        
       ],
-      gridCols: 2,
+      gridCols: 3,
     },
   ];
 
@@ -522,7 +506,7 @@ const Header = () => {
   return (
     <header className="w-full top-0 left-0 absolute max-sm:fixed flex justify-between items-center px-4 py-4 sm:px-8 sm:py-6 md:px-12 md:py-8 text-white z-50 max-sm:bg-black">
       <div className="max-sm:w-full flex gap-6 items-center max-sm:justify-between">
-        <Link href="/" passHref>
+        <a href="/" >
           <img
             src="/images/660e8ed8eb1804501de1d733_Group 1.svg"
             alt="Logo"
@@ -531,7 +515,7 @@ const Header = () => {
             width={180}
             height={60}
           />
-        </Link>
+        </a>
       </div>
 
       <nav>
