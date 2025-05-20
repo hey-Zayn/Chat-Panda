@@ -54,7 +54,7 @@ const HaloHeroSection = () => {
   return (
     <section 
       ref={containerRef}
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-[#181818]"
     >
       {/* Large background text */}
       <h1 

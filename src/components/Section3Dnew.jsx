@@ -43,35 +43,38 @@ const Section3Dnew = () => {
   useEffect(() => {
     if (!mainRef.current || !sceneRef.current) return;
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: mainRef.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1,
-          onUpdate: (self) => {
-            const newProgress = Math.min(self.progress, 1);
-            if (Math.abs(newProgress - progress) > 0.01) {
-              setProgress(newProgress);
-            }
+    // Wait until section enters viewport to register scroll animation
+    const triggerOnce = ScrollTrigger.create({
+      trigger: mainRef.current,
+      start: "top 80%",
+      once: true,
+      onEnter: () => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: mainRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1,
+            onUpdate: (self) => {
+              setProgress(self.progress);
+            },
+            // markers: true, // uncomment to debug
           },
-        },
-      });
+        });
 
-      tl.to(sceneRef.current, { ease: "none", x: "25vw", y: "100vh" })
-        .to(sceneRef.current, { ease: "none", x: "-25vw", y: "200vh" })
-        .to(sceneRef.current, { ease: "none", x: "0vw", y: "300vh" });
-    }, mainRef);
+        tl.to(sceneRef.current, { ease: "none", x: "25vw", y: "100vh" })
+          .to(sceneRef.current, { ease: "none", x: "-25vw", y: "200vh" })
+          .to(sceneRef.current, { ease: "none", x: "0vw", y: "300vh" });
+      },
+    });
 
     return () => {
-      ctx.revert();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, [progress]);
+  }, []);
 
   return (
-    <div ref={mainRef} className="w-full h-full overflow-hidden bg-[#30087D]">
+    <div ref={mainRef} className="w-full h-[400vh] overflow-hidden bg-[#30087D] z-10">
       <section className="relative w-full h-screen">
         <ContentSection />
         <div ref={sceneRef} className="w-full h-full">

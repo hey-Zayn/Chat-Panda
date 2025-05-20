@@ -1,21 +1,20 @@
 "use client";
-import React, { useRef, useEffect, useMemo, useCallback } from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Environment, PerspectiveCamera } from "@react-three/drei";
 import { Model } from "./Model";
 
-// Pre-calculate camera position segments
+// Camera movement segments based on scroll progress
 const CAMERA_SEGMENTS = [
   { start: 0, end: 0.33, from: 0, to: 1 },
   { start: 0.33, end: 0.66, from: 1, to: 2 },
-  { start: 0.66, end: 1, from: 2, to: 3 }
+  { start: 0.66, end: 1, from: 2, to: 3 },
 ];
 
 const Scene = ({ progress = 0, modelRef }) => {
-  const cameraRef = useRef(null);
-  const lastProgress = useRef(progress);
+  const cameraRef = useRef();
 
-  // Memoize camera positions to avoid recreating array on each render
+  // Precomputed camera path
   const cameraPositions = useMemo(() => [
     [-4.6, 0.6, 8.8],
     [7.6, -4.6, 4.3],
@@ -23,46 +22,36 @@ const Scene = ({ progress = 0, modelRef }) => {
     [3.1, -2.7, 8.8],
   ], []);
 
-  // Optimized camera position calculation
-  const calculateCameraPosition = useCallback((progress) => {
-    const segment = CAMERA_SEGMENTS.find(s => progress >= s.start && progress <= s.end);
+  // Calculate interpolated camera position based on scroll progress
+  const getCameraPosition = useCallback((progressValue) => {
+    const segment = CAMERA_SEGMENTS.find(
+      (s) => progressValue >= s.start && progressValue <= s.end
+    );
+
     if (!segment) return cameraPositions[0];
 
-    const percentage = (progress - segment.start) / (segment.end - segment.start);
-    const [startX, startY, startZ] = cameraPositions[segment.from];
-    const [endX, endY, endZ] = cameraPositions[segment.to];
+    const t = (progressValue - segment.start) / (segment.end - segment.start);
+    const [x1, y1, z1] = cameraPositions[segment.from];
+    const [x2, y2, z2] = cameraPositions[segment.to];
 
     return [
-      startX + (endX - startX) * percentage,
-      startY + (endY - startY) * percentage,
-      startZ + (endZ - startZ) * percentage
+      x1 + (x2 - x1) * t,
+      y1 + (y2 - y1) * t,
+      z1 + (z2 - z1) * t,
     ];
   }, [cameraPositions]);
 
-  // Initialize camera position immediately on mount
-  useEffect(() => {
-    if (cameraRef.current) {
-      const [x, y, z] = calculateCameraPosition(progress);
-      cameraRef.current.position.set(x, y, z);
-      cameraRef.current.lookAt(0, 0, 0);
-    }
-  }, [calculateCameraPosition, progress]);
-
-  // Use useFrame to continuously update camera lookAt
+  // Update camera position on every frame
   useFrame(() => {
-    if (cameraRef.current) {
-      cameraRef.current.lookAt(0, 0, 0);
-    }
-  });
+    if (!cameraRef.current) return;
 
-  // Update camera position based on progress
-  useEffect(() => {
-    if (!cameraRef.current || progress === lastProgress.current) return;
-    
-    const [x, y, z] = calculateCameraPosition(progress);
+    // Don't update if user hasn't scrolled yet
+    if (progress <= 0.01) return;
+
+    const [x, y, z] = getCameraPosition(progress);
     cameraRef.current.position.set(x, y, z);
-    lastProgress.current = progress;
-  }, [progress, calculateCameraPosition]);
+    cameraRef.current.lookAt(0, 0, 0);
+  });
 
   return (
     <>
@@ -75,10 +64,10 @@ const Scene = ({ progress = 0, modelRef }) => {
         position={cameraPositions[0]}
       />
       <Environment preset="city" />
-      <Model 
-        ref={modelRef} 
+      <Model
+        ref={modelRef}
         rotation={[0, 0, 0]}
-        // scale={[60, 60, 60]} // Increased scale from [10,10,10] to [15,15,15] for larger model size
+        // scale={[15, 15, 15]} // optional size scaling
       />
     </>
   );

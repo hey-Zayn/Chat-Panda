@@ -2,13 +2,13 @@
 import React, { useRef, useCallback, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 
-// Lazy load components
-const LazyImage = dynamic(() => import('next/image'), { 
+// Lazy load next/image
+const LazyImage = dynamic(() => import('next/image'), {
   ssr: false,
-  loading: () => <div className="w-full h-auto bg-gray-200 animate-pulse" />
+  loading: () => <div className="w-full h-auto bg-gray-200 animate-pulse" />,
 });
 
-// Create a custom Suspense boundary component
+// Suspense wrapper
 const CustomSuspense = ({ children }) => (
   <React.Suspense fallback={<div className="w-full h-auto bg-gray-200 animate-pulse" />}>
     {children}
@@ -16,27 +16,19 @@ const CustomSuspense = ({ children }) => (
 );
 
 const Section7 = () => {
-  // Refs
   const section7Ref = useRef(null);
   const textRef = useRef(null);
   const cardRefs = useRef([]);
   const mobileCardRefs = useRef([]);
   const scrollTriggersRef = useRef([]);
 
-  // Memoized constants
   const rotations = useMemo(() => [-15, 15, -15, 15, -15, 15], []);
   const cardCount = 6;
 
-  // Optimized mobile animation creation
   const createMobileAnimationS7 = useCallback((gsap, ScrollTrigger, mobileCardRef, isEven, index) => {
     if (!mobileCardRef) return null;
 
-    const tl = gsap.timeline({
-      defaults: {
-        duration: 0.6,
-        ease: "power2.out",
-      },
-    });
+    const tl = gsap.timeline({ defaults: { duration: 0.6, ease: "power2.out" } });
 
     const st = ScrollTrigger.create({
       trigger: mobileCardRef,
@@ -65,24 +57,20 @@ const Section7 = () => {
     });
 
     scrollTriggersRef.current.push(st);
-    return st;
   }, []);
 
-  // Optimized ref initialization
   const initRefs = useCallback((el, index, refArray) => {
     if (el && !refArray.current[index]) {
       refArray.current[index] = el;
     }
   }, []);
 
-  // Main animation setup
   useEffect(() => {
     let mounted = true;
     let gsap, ScrollTrigger;
 
     const loadAnimations = async () => {
       try {
-        // Dynamically import GSAP libraries
         gsap = (await import('gsap')).default;
         ScrollTrigger = (await import('gsap/ScrollTrigger')).default;
 
@@ -90,102 +78,87 @@ const Section7 = () => {
 
         gsap.registerPlugin(ScrollTrigger);
 
-        // Clear existing ScrollTriggers
         scrollTriggersRef.current.forEach((st) => st.kill());
         scrollTriggersRef.current = [];
 
-        if (window.innerWidth >= 768) {
-          // Desktop animations
-          const screenWidth = window.innerWidth;
-          const baseX = Math.min(screenWidth * 0.75, 1200);
+        ScrollTrigger.matchMedia({
+          "(min-width: 768px)": () => {
+            const screenWidth = window.innerWidth;
+            const baseX = Math.min(screenWidth * 0.75, 1200);
 
-          const masterTl = gsap.timeline({
-            defaults: {
-              duration: 2,
-              ease: "power1.inOut",
-            },
-          });
+            const masterTl = gsap.timeline({
+              defaults: {
+                duration: 2,
+                ease: "power1.inOut",
+              },
+            });
 
-          const masterST = ScrollTrigger.create({
-            trigger: section7Ref.current,
-            start: "top top",
-            end: "+=200%",
-            scrub: 0.8,
-            animation: masterTl,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            fastScrollEnd: true,
-            preventOverlaps: true,
-            refreshPriority: 1,
-          });
+            const masterST = ScrollTrigger.create({
+              trigger: section7Ref.current,
+              start: "top top",
+              end: "+=200%",
+              scrub: 0.8,
+              animation: masterTl,
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
+              fastScrollEnd: true,
+              preventOverlaps: true,
+              refreshPriority: 1,
+            });
 
-          scrollTriggersRef.current.push(masterST);
+            scrollTriggersRef.current.push(masterST);
 
-          // Text animation
-          masterTl.from(
-            textRef.current,
-            {
+            masterTl.from(textRef.current, {
               opacity: 0,
               y: 20,
               duration: 3,
-            },
-            0
-          );
+            }, 0);
 
-          // Card animations
-          cardRefs.current.forEach((cardRef, index) => {
-            if (!cardRef) return;
+            cardRefs.current.forEach((cardRef, index) => {
+              if (!cardRef) return;
 
-            masterTl.addLabel(`card${index}Enter`, 2 + index * 3);
-
-            masterTl.from(
-              cardRef,
-              {
+              masterTl.addLabel(`card${index}Enter`, 2 + index * 3);
+              masterTl.from(cardRef, {
                 rotationZ: rotations[index],
                 rotationY: rotations[index],
                 rotationX: rotations[index],
                 x: baseX,
                 y: -150,
                 opacity: 0,
-              },
-              `card${index}Enter`
-            );
-          });
+              }, `card${index}Enter`);
 
-          // Exit animations
-          cardRefs.current.forEach((cardRef, index) => {
-            if (!cardRef) return;
-
-            masterTl.addLabel(`card${index}Exit`, 2 + cardCount * 3 + 8 + index * 3);
-
-            masterTl.to(
-              cardRef,
-              {
-                rotationZ: rotations[index] * -1,
-                rotationY: rotations[index] * -1,
-                rotationX: rotations[index] * -1,
+              masterTl.addLabel(`card${index}Exit`, 2 + cardCount * 3 + 8 + index * 3);
+              masterTl.to(cardRef, {
+                rotationZ: -rotations[index],
+                rotationY: -rotations[index],
+                rotationX: -rotations[index],
                 x: -baseX,
                 y: 150,
                 opacity: 0,
-              },
-              `card${index}Exit`
-            );
-          });
-        } else {
-          // Mobile animations
-          mobileCardRefs.current.forEach((ref, index) => {
-            if (ref) {
-              createMobileAnimationS7(gsap, ScrollTrigger, ref, index % 2 === 0, index);
-            }
-          });
-        }
+              }, `card${index}Exit`);
+            });
+          },
+
+          "(max-width: 767px)": () => {
+            mobileCardRefs.current.forEach((ref, index) => {
+              if (ref) {
+                createMobileAnimationS7(gsap, ScrollTrigger, ref, index % 2 === 0, index);
+              }
+            });
+          }
+        });
+
+        ScrollTrigger.refresh();
       } catch (error) {
         console.error("Animation loading error:", error);
       }
     };
 
-    loadAnimations();
+    // Delay animation setup to allow layout to stabilize
+    requestAnimationFrame(() => {
+      setTimeout(loadAnimations, 100);
+    });
 
     return () => {
       mounted = false;
@@ -196,6 +169,7 @@ const Section7 = () => {
 
   return (
     <>
+      {/* Desktop / Tablet Section */}
       <div
         ref={section7Ref}
         className="w-full lg:h-[120vh] md:h-[70vh] py-20 max-sm:hidden overflow-hidden bg-white"
@@ -234,7 +208,7 @@ const Section7 = () => {
         </div>
       </div>
 
-      {/* Mobile view */}
+      {/* Mobile Section */}
       <div className="w-full h-full overflow-hidden lg:hidden md:hidden max-sm:block bg-white">
         <div className="h-full w-full py-8 px-10 overflow-hidden">
           <div className="flex flex-col justify-center gap-6">
@@ -268,7 +242,7 @@ const Section7 = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default React.memo(Section7);
