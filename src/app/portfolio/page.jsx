@@ -1,5 +1,6 @@
 "use client";
 
+
 import React, { lazy, Suspense } from "react";
 
 // Lazy load components
@@ -19,6 +20,7 @@ const Page = () => {
         <PortfolioHero />
       </Suspense>
 
+
       <Suspense fallback={<div className="text-white text-center py-10">Loading timeline...</div>}>
         <InteractiveTimeline />
       </Suspense>
@@ -29,6 +31,8 @@ const Page = () => {
         </Suspense>
       </section>
 
+
+       
       <Suspense fallback={<div className="text-white text-center py-10">Loading clients...</div>}>
         <ClientsSlider />
       </Suspense>
