@@ -4,7 +4,7 @@ import { lazy, Suspense } from 'react';
 import { CircleAlert } from "lucide-react";
 
 // Lazy load components
-const Marquee = lazy(() => import('@/components/marquee'));
+const Marquee = lazy(() => import('../../components/Marquee.jsx'));
 
 const Page = () => {
   return (
