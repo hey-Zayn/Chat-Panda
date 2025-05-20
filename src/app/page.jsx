@@ -1,5 +1,7 @@
 'use client';
 
+
+
 import { useEffect, useCallback, lazy, Suspense } from 'react';
 
 // Define breakpoints as constants for maintainability
@@ -80,7 +82,7 @@ export default function Home() {
       <Suspense fallback={<LoadingPlaceholder />}>
         <Section2 />
       </Suspense>
-
+   
        <Suspense fallback={<LoadingPlaceholder />}>
         <Section3 />
       </Suspense>

@@ -1,8 +1,9 @@
 "use client"
-import Marquee from "@/components/marquee";
+
 
 import React, { useEffect, useState } from "react";
 import { CircleAlert } from "lucide-react";
+import Marquee from "@/components/marquee";
 const Page = () => {
   return (
     <div className="w-full h-full bg-[#191919] ">
