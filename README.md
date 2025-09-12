@@ -6,10 +6,10 @@
 
 A cutting-edge marketing website built to showcase a brand through immersive 3D visuals and seamless animations. This project demonstrates modern frontend techniques to create engaging user experiences that captivate and convert visitors.
 
-**Live Demo:** [🔗 chatpanda.vercel.app](https://chatpanda.vercel.app)  
-**Source Code:** [🔗 GitHub Repository](Your_GitHub_Repo_Link_Here)
+**Live Demo:** [🔗 chatpanda.vercel.app](https://chat-panda.vercel.app/)  
+**Source Code:** [🔗 GitHub Repository]((https://github.com/hey-Zayn/Chat-Panda))
 
-![ChatPanda Website Preview](URL_to_Preview_Image_or_GIF_Here)
+
 
 ## ✨ Features
 
